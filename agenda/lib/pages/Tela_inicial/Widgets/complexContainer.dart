@@ -2,11 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class Igreja extends StatelessWidget {
+class ComplexContainer extends StatelessWidget {
+  final List<double> data;
+
+  const ComplexContainer({Key key, this.data}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final List<double> data = [30.0, 50.0, 100.0, 40.0, 90.0, 25.0];
+
     return Expanded(
       child: ClipPath(
         clipper: IgrejaClipper(
@@ -16,7 +19,7 @@ class Igreja extends StatelessWidget {
           size: size,
         ),
         child: Container(
-          color: Colors.white,
+          color: Colors.transparent,
         ),
       ),
     );
@@ -35,14 +38,12 @@ class IgrejaClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     double sectionWith =
         (MediaQuery.of(context).size.height * .35) / data.length - 1;
-    print(sectionWith);
 
     Path path = Path();
 
     path.moveTo(0, size.height);
 
     for (int i = 0; i < data.length; i++) {
-      print(data[i]);
       path.lineTo(
           i * sectionWith, size.height - size.height * (data[i] / maxValue));
     }

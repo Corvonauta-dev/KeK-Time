@@ -1,9 +1,37 @@
-import 'package:agenda/pages/Tela_inicial/Widgets/igreja.dart';
 import 'package:flutter/material.dart';
+
+import 'Widgets/complexContainer.dart';
 
 class PgTelaIni extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final List<double> igreja = [
+      30.0,
+      57.0,
+      65.0,
+      58.0,
+      55.0,
+      53.0,
+      80.0,
+      80.0,
+      78.0,
+      75.0,
+      48.0,
+      45.0,
+      43.0,
+      40.0,
+    ];
+    final List<double> guilda = [
+      80.0,
+      100.0,
+      99.0,
+      99.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+    ];
     return Scaffold(
       body: Stack(
         children: [
@@ -21,7 +49,14 @@ class PgTelaIni extends StatelessWidget {
             child: Container(
               height: MediaQuery.of(context).size.height * .43,
               width: MediaQuery.of(context).size.width * .35,
-              color: Colors.red,
+              color: Colors.transparent,
+              child: Column(
+                children: [
+                  ComplexContainer(
+                    data: guilda,
+                  ),
+                ],
+              ),
             ),
           ),
           Positioned(
@@ -33,7 +68,9 @@ class PgTelaIni extends StatelessWidget {
               color: Colors.transparent,
               child: Column(
                 children: [
-                  Igreja(),
+                  ComplexContainer(
+                    data: igreja,
+                  ),
                 ],
               ),
             ),
