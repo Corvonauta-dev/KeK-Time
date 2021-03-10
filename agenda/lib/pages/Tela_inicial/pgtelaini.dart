@@ -1,3 +1,4 @@
+import 'package:agenda/pages/Tela_inicial/Widgets/igreja.dart';
 import 'package:flutter/material.dart';
 
 class PgTelaIni extends StatelessWidget {
@@ -24,12 +25,17 @@ class PgTelaIni extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * .25,
-            left: MediaQuery.of(context).size.width * .03,
+            top: MediaQuery.of(context).size.height * .18,
+            left: MediaQuery.of(context).size.width * .04,
             child: Container(
-              height: MediaQuery.of(context).size.height * .285,
-              width: MediaQuery.of(context).size.width * .1,
-              color: Colors.blue,
+              height: MediaQuery.of(context).size.height * .35,
+              width: MediaQuery.of(context).size.width * .58,
+              color: Colors.transparent,
+              child: Column(
+                children: [
+                  Igreja(),
+                ],
+              ),
             ),
           ),
         ],
