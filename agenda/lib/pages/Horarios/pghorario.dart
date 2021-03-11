@@ -11,7 +11,7 @@ class Horarios extends StatelessWidget {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           leading: BackButton(
-            color: Colors.white,
+            color: Colors.red,
           ),
           backgroundColor: Colors.transparent,
           centerTitle: true,
