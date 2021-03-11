@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class BuildListTile extends StatelessWidget {
   final Materia materia;
+  final int index;
 
-  const BuildListTile({Key key, this.materia}) : super(key: key);
+  const BuildListTile({Key key, this.materia, this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -24,9 +25,9 @@ class BuildListTile extends StatelessWidget {
               ],
             ),
             children: [
-              TextSpan(text: materia.horarios[0].horarioInicio),
+              TextSpan(text: materia.horarios[index].horarioInicio),
               TextSpan(text: '\n'),
-              TextSpan(text: materia.horarios[0].horarioFim)
+              TextSpan(text: materia.horarios[index].horarioFim)
             ]),
       ),
       title: RichText(
