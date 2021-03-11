@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'Widgets/materiaHorario.dart';
 
-class Horarios extends StatelessWidget {
+class Horarios extends StatefulWidget {
+  @override
+  _HorariosState createState() => _HorariosState();
+}
+
+class _HorariosState extends State<Horarios> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -11,7 +16,7 @@ class Horarios extends StatelessWidget {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           leading: BackButton(
-            color: Colors.red,
+            color: Colors.white,
           ),
           backgroundColor: Colors.transparent,
           centerTitle: true,
@@ -77,6 +82,17 @@ class Horarios extends StatelessWidget {
               ],
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => showModalBottomSheet(
+            context: context,
+            builder: (context) => Container(),
+          ),
+          child: Icon(
+            Icons.add,
+            color: Colors.black,
+          ),
+          backgroundColor: Colors.white60,
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:agenda/models/materia.dart';
+import 'package:agenda/pages/Horarios/hEdit/pgHorarioEdit.dart';
 import 'package:flutter/material.dart';
 
 class BuildListTile extends StatelessWidget {
@@ -9,6 +10,16 @@ class BuildListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => HorarioEdit(
+              materia: materia,
+            ),
+          ),
+        );
+      },
       leading: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(

@@ -18,7 +18,7 @@ class _MateriaHorarioState extends State<MateriaHorario> {
     [
       Horario('08:20', '09:10', 'seg'),
       Horario('10:20', '11:10', 'sex'),
-      Horario('09:10', '10:00', 'seg')
+      Horario('09:10', '10:00', 'seg'),
     ],
   );
 
@@ -36,19 +36,5 @@ class _MateriaHorarioState extends State<MateriaHorario> {
         return Container();
       },
     );
-
-    // for (int i = 0; i < materia.horarios.length; i++) {
-    //   if (widget.diaSemana == materia.horarios[0].diaSemana) {}
-    // }
-    // if (widget.diaSemana == materia.horarios[0].diaSemana) {
-    //   return
-    //   ListView(
-    //     children: [
-    //       BuildListTile(
-    //         materia: materia,
-    //       ),
-    //     ],
-    //   );
-    // }
   }
 }
