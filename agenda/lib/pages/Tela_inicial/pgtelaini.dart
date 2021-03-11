@@ -1,3 +1,4 @@
+import 'package:agenda/pages/Horarios/pghorario.dart';
 import 'package:flutter/material.dart';
 
 import 'Widgets/complexContainer.dart';
@@ -50,12 +51,22 @@ class PgTelaIni extends StatelessWidget {
               height: MediaQuery.of(context).size.height * .43,
               width: MediaQuery.of(context).size.width * .35,
               color: Colors.transparent,
-              child: Column(
-                children: [
-                  ComplexContainer(
-                    data: guilda,
-                  ),
-                ],
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => Horarios(),
+                    ),
+                  );
+                },
+                child: Column(
+                  children: [
+                    ComplexContainer(
+                      data: guilda,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

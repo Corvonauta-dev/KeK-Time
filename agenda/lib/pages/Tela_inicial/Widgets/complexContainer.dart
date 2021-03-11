@@ -12,7 +12,7 @@ class ComplexContainer extends StatelessWidget {
 
     return Expanded(
       child: ClipPath(
-        clipper: IgrejaClipper(
+        clipper: ComplexClipper(
           data: data,
           maxValue: data.reduce(max),
           context: context,
@@ -26,13 +26,13 @@ class ComplexContainer extends StatelessWidget {
   }
 }
 
-class IgrejaClipper extends CustomClipper<Path> {
+class ComplexClipper extends CustomClipper<Path> {
   final double maxValue;
   final List<double> data;
   final BuildContext context;
   final Size size;
 
-  IgrejaClipper({this.size, this.context, this.maxValue, this.data});
+  ComplexClipper({this.size, this.context, this.maxValue, this.data});
 
   @override
   Path getClip(Size size) {

@@ -1,3 +1,4 @@
+import 'package:agenda/pages/Horarios/pghorario.dart';
 import 'package:agenda/pages/Tela_inicial/pgtelaini.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.lightBlue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: PgTelaIni(),
+      home: Horarios(),
     );
   }
 }
