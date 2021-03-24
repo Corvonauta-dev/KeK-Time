@@ -1,3 +1,4 @@
+import 'package:agenda/pages/Calendario_eventos/pgcalendario.dart';
 import 'package:agenda/pages/Horarios/pghorario.dart';
 import 'package:flutter/material.dart';
 
@@ -77,12 +78,22 @@ class PgTelaIni extends StatelessWidget {
               height: MediaQuery.of(context).size.height * .35,
               width: MediaQuery.of(context).size.width * .58,
               color: Colors.transparent,
-              child: Column(
-                children: [
-                  ComplexContainer(
-                    data: igreja,
-                  ),
-                ],
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => Calendario(),
+                    ),
+                  );
+                },
+                child: Column(
+                  children: [
+                    ComplexContainer(
+                      data: igreja,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
