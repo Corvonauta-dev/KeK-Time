@@ -76,6 +76,9 @@ class _Calendario extends State<Calendario> {
                 child: Column(
                   children: <Widget>[
                     TableCalendar(
+                      // availableCalendarFormats: const {
+                      //   CalendarFormat.month: 'Month',
+                      // },
                       calendarStyle: CalendarStyle(
                         canEventMarkersOverflow: true,
                         markersColor: Colors.transparent,
