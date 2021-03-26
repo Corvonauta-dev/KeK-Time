@@ -4,6 +4,7 @@ class Evento {
   String horario;
   String description;
   String dia;
+  String mes;
 
-  Evento(this.titulo, this.horario, this.description);
+  Evento(this.titulo, this.horario, this.description, this.dia, this.mes);
 }
