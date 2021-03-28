@@ -1,3 +1,4 @@
+import 'package:agenda/pages/Horarios/+h/pgplush.dart';
 import 'package:flutter/material.dart';
 
 import 'Widgets/materiaHorario.dart';
@@ -84,10 +85,14 @@ class _HorariosState extends State<Horarios> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => showModalBottomSheet(
-            context: context,
-            builder: (context) => Container(),
-          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => Janelona(),
+              ),
+            );
+          },
           child: Icon(
             Icons.add,
             color: Colors.black,

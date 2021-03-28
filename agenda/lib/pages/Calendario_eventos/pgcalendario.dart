@@ -1,14 +1,11 @@
-import 'dart:core';
-//import 'dart:html';
-
-//import 'package:google_fonts/google_fonts.dart';
-//import 'package:provider/provider.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:agenda/models/evento.dart';
+import 'package:agenda/pages/Calendario_eventos/+c/janelinha.dart';
+import 'package:agenda/repositories/eventsRepositorie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Calendario extends StatefulWidget {
@@ -26,10 +23,17 @@ class _Calendario extends State<Calendario> {
     return TextStyle(color: Colors.red[500], fontWeight: fontWeight);
   }
 
+  TextEditingController _nomeEventoController;
+  TextEditingController _horarioEventoController;
+  TextEditingController _descriptionEventoController;
+
   @override
   void initState() {
     super.initState();
     _controller = CalendarController();
+    _nomeEventoController = TextEditingController();
+    _horarioEventoController = TextEditingController();
+    _descriptionEventoController = TextEditingController();
   }
 
   @override
@@ -37,39 +41,6 @@ class _Calendario extends State<Calendario> {
     super.dispose();
     _controller.dispose();
   }
-
-  List<Evento> _evento = [
-    Evento(
-      'evento 1',
-      '13:50',
-      'aqui vai a descricao do evento 1',
-    ),
-    Evento(
-      'evento 2',
-      '15:50',
-      'aqui vai a descricao do evento 2',
-    ),
-    Evento(
-      'evento 3',
-      '14:20',
-      'aqui vai a descricao do evento 3',
-    ),
-    Evento(
-      'evento 4',
-      '16:20',
-      'aqui vai a descricao do evento 4',
-    ),
-    Evento(
-      'evento 5',
-      '18:20',
-      'aqui vai a descricao do evento 5',
-    ),
-    Evento(
-      'evento 6',
-      '20:20',
-      'aqui vai a descricao do evento 6',
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -168,9 +139,37 @@ class _Calendario extends State<Calendario> {
                             bottomRight: const Radius.circular(20),
                           ),
                         ),
-                        child: buildListView(),
+                        child: Consumer<EventsRepositorie>(
+                          builder: (context, repositorie, child) {
+                            return ListView.builder(
+                              itemCount: repositorie.evento.length,
+                              itemBuilder: (context, index) {
+                                final List<Evento> tabela = repositorie.evento;
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: Text(
+                                        tabela[index].horario,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      title: Text(
+                                        tabela[index].titulo,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      subtitle: Text(
+                                        tabela[index].description,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -179,24 +178,17 @@ class _Calendario extends State<Calendario> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Container(
-                color: Colors.black,
-                height: 180,
-                child: Container(
-                  child: _buildColumn(),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(20),
-                      topRight: const Radius.circular(20),
-                    ),
-                  ),
-                ),
-              );
-            }),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => Janelinha(
+                dia: _controller.selectedDay.day.toString(),
+                mes: _controller.selectedDay.month.toString(),
+              ),
+            ),
+          );
+        },
         child: Icon(
           Icons.add,
           color: Colors.black,
@@ -206,48 +198,9 @@ class _Calendario extends State<Calendario> {
     );
   }
 
-  ListView buildListView() {
-    return ListView.builder(
-      itemCount: _evento.length,
-      itemBuilder: (context, index) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            ListTile(
-              leading: Text(
-                _evento[index].horario,
-                style: TextStyle(color: Colors.white),
-              ),
-              title: Text(
-                _evento[index].titulo,
-                style: TextStyle(color: Colors.white),
-              ),
-              subtitle: Text(
-                _evento[index].description,
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Column _buildColumn() {
-    return Column(
-      children: <Widget>[
-        ListTile(
-          leading: Icon(Icons.ac_unit),
-          title: Text('Adicionar Evento'),
-          onTap: () => _tap('addEvent'),
-        ),
-      ],
-    );
-  }
-
-  void _tap(String name) {
-    Navigator.pop(context);
-  }
+//   ListView buildListView() {
+//     return;
+//   }
 }
 
 //     __

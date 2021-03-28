@@ -1,15 +1,20 @@
-
-import 'package:agenda/repositories/materiaRepositories.dart';
+import 'package:agenda/models/evento.dart';
+import 'package:agenda/repositories/eventsRepositorie.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class Janelona extends StatefulWidget {
+class Janelinha extends StatefulWidget {
+  final String dia;
+  final String mes;
+
+  const Janelinha({Key key, this.dia, this.mes}) : super(key: key);
+
   @override
-  _JanelonaState createState() => _JanelonaState();
+  _JanelinhaState createState() => _JanelinhaState();
 }
 
-class _JanelonaState extends State<Janelona> {
+class _JanelinhaState extends State<Janelinha> {
   final TextEditingController _nomeEventoController = TextEditingController();
 
   final TextEditingController _horarioEventoController =
@@ -21,8 +26,12 @@ class _JanelonaState extends State<Janelona> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   save() {
-    Provider.of<MateriaRepositorie>(context, listen: false).addMateria();
-
+    Provider.of<EventsRepositorie>(context, listen: false).addEvento(
+        titulo: _nomeEventoController.text,
+        horario: _horarioEventoController.text,
+        description: _descriptionEventoController.text,
+        dia: widget.dia,
+        mes: widget.mes);
     Get.back();
     Get.snackbar(
       'Sucesso!',
