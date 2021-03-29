@@ -22,6 +22,7 @@ class EventsRepositorie extends ChangeNotifier {
   }
 
   List<Materia> _materia = [];
+
   UnmodifiableListView<Materia> get materia => UnmodifiableListView(_materia);
 
   void addMateria({
