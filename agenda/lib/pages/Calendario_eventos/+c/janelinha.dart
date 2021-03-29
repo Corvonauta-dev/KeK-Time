@@ -4,7 +4,7 @@ import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:day_night_time_picker/lib/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
 import 'package:provider/provider.dart';
 
 class Janelinha extends StatefulWidget {
@@ -39,14 +39,14 @@ class _JanelinhaState extends State<Janelinha> {
   save() {
     Provider.of<EventsRepositorie>(context, listen: false).addEvento(
         titulo: _nomeEventoController.text,
-        horario: _horarioEventoController.text,
+        horario: _time.format(context),
         description: _descriptionEventoController.text,
         dia: widget.dia,
         mes: widget.mes);
     Get.back();
     Get.snackbar(
       'Sucesso!',
-      'Titulo cadastrado!',
+      'Evento cadastrado!',
       backgroundColor: Colors.grey[900],
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
@@ -55,8 +55,6 @@ class _JanelinhaState extends State<Janelinha> {
 
   @override
   Widget build(BuildContext context) {
-    var maskH = new MaskTextInputFormatter(
-        mask: '##:##', filter: {"#": RegExp(r'[0-9]')});
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(

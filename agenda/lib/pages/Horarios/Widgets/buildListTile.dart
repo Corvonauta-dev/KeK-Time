@@ -1,12 +1,13 @@
+import 'package:agenda/models/horario.dart';
 import 'package:agenda/models/materia.dart';
 import 'package:agenda/pages/Horarios/hEdit/pgHorarioEdit.dart';
 import 'package:flutter/material.dart';
 
 class BuildListTile extends StatelessWidget {
   final Materia materia;
-  final int index;
+  final Horario horario;
 
-  const BuildListTile({Key key, this.materia, this.index}) : super(key: key);
+  const BuildListTile({Key key, this.materia, this.horario}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -36,9 +37,9 @@ class BuildListTile extends StatelessWidget {
               ],
             ),
             children: [
-              TextSpan(text: materia.horarios[index].horarioInicio),
+              TextSpan(text: horario.horarioInicio),
               TextSpan(text: '\n'),
-              TextSpan(text: materia.horarios[index].horarioFim)
+              TextSpan(text: horario.horarioFim)
             ]),
       ),
       title: RichText(
