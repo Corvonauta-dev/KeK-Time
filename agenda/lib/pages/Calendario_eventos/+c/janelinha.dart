@@ -1,7 +1,10 @@
 import 'package:agenda/models/evento.dart';
 import 'package:agenda/repositories/eventsRepositorie.dart';
+import 'package:day_night_time_picker/day_night_time_picker.dart';
+import 'package:day_night_time_picker/lib/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class Janelinha extends StatefulWidget {
@@ -25,6 +28,14 @@ class _JanelinhaState extends State<Janelinha> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  TimeOfDay _time = TimeOfDay.now().replacing(minute: 30);
+
+  void onTimeChanged(TimeOfDay newTime) {
+    setState(() {
+      _time = newTime;
+    });
+  }
+
   save() {
     Provider.of<EventsRepositorie>(context, listen: false).addEvento(
         titulo: _nomeEventoController.text,
@@ -44,6 +55,8 @@ class _JanelinhaState extends State<Janelinha> {
 
   @override
   Widget build(BuildContext context) {
+    var maskH = new MaskTextInputFormatter(
+        mask: '##:##', filter: {"#": RegExp(r'[0-9]')});
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -66,7 +79,40 @@ class _JanelinhaState extends State<Janelinha> {
             width: MediaQuery.of(context).size.width,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 100.0),
+            padding: const EdgeInsets.only(top: 120.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      showPicker(
+                        context: context,
+                        value: _time,
+                        onChange: onTimeChanged,
+                        minuteInterval: MinuteInterval.FIVE,
+                        disableHour: false,
+                        disableMinute: false,
+                        minMinute: 7,
+                        maxMinute: 56,
+                        // Optional onChange to receive value as DateTime
+                        onChangeDateTime: (DateTime dateTime) {
+                          print(dateTime);
+                        },
+                      ),
+                    );
+                  },
+                  child: Text(
+                    _time.format(context),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 52),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10, top: 200.0, left: 10),
             child: Form(
               key: _formKey,
               child: Column(
@@ -75,13 +121,13 @@ class _JanelinhaState extends State<Janelinha> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: TextFormField(
                       controller: _nomeEventoController,
-                      style: TextStyle(color: Colors.green[700]),
+                      style: TextStyle(color: Colors.white),
                       keyboardType: TextInputType.name,
                       textCapitalization: TextCapitalization.words,
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.person,
-                          color: Colors.green[700],
+                          color: Colors.white,
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -96,14 +142,14 @@ class _JanelinhaState extends State<Janelinha> {
                             Radius.circular(20),
                           ),
                           borderSide: BorderSide(
-                            color: Colors.greenAccent[400],
+                            color: Colors.grey,
                           ),
                         ),
                         labelText: 'Nome do Evento',
                         labelStyle:
-                            TextStyle(color: Colors.green[700], fontSize: 12),
+                            TextStyle(color: Colors.white, fontSize: 12),
                         filled: true,
-                        fillColor: Colors.green[50],
+                        fillColor: Colors.grey[800].withOpacity(.8),
                       ),
                       validator: (String value) {
                         if (value.isEmpty) {
@@ -113,59 +159,60 @@ class _JanelinhaState extends State<Janelinha> {
                       },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: TextFormField(
-                      controller: _horarioEventoController,
-                      style: TextStyle(color: Colors.green[700]),
-                      keyboardType: TextInputType.name,
-                      textCapitalization: TextCapitalization.words,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.person,
-                          color: Colors.green[700],
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                          borderSide: BorderSide(
-                            color: Colors.greenAccent[400],
-                          ),
-                        ),
-                        labelText: 'Horario do Evento',
-                        labelStyle:
-                            TextStyle(color: Colors.green[700], fontSize: 12),
-                        filled: true,
-                        fillColor: Colors.green[50],
-                      ),
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Por Favor Digite o Horario do Evento";
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 8.0),
+                  //   child: TextFormField(
+                  //     controller: _horarioEventoController,
+                  //     style: TextStyle(color: Colors.white),
+                  //     keyboardType: TextInputType.name,
+                  //     textCapitalization: TextCapitalization.words,
+                  //     decoration: InputDecoration(
+                  //       prefixIcon: Icon(
+                  //         Icons.person,
+                  //         color: Colors.white,
+                  //       ),
+                  //       enabledBorder: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.all(
+                  //           Radius.circular(20),
+                  //         ),
+                  //         borderSide: BorderSide(
+                  //           color: Colors.transparent,
+                  //         ),
+                  //       ),
+                  //       focusedBorder: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.all(
+                  //           Radius.circular(20),
+                  //         ),
+                  //         borderSide: BorderSide(
+                  //           color: Colors.grey,
+                  //         ),
+                  //       ),
+                  //       labelText: 'Horario do Evento',
+                  //       labelStyle:
+                  //           TextStyle(color: Colors.white, fontSize: 12),
+                  //       filled: true,
+                  //       fillColor: Colors.grey[800].withOpacity(.8),
+                  //     ),
+                  //     validator: (String value) {
+                  //       if (value.isEmpty) {
+                  //         return "Por Favor Digite o Horario do Evento";
+                  //       }
+                  //       return null;
+                  //     },
+                  //   ),
+                  // ),
+
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: TextFormField(
                       controller: _descriptionEventoController,
-                      style: TextStyle(color: Colors.green[700]),
+                      style: TextStyle(color: Colors.white),
                       keyboardType: TextInputType.name,
                       textCapitalization: TextCapitalization.words,
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.person,
-                          color: Colors.green[700],
+                          color: Colors.white,
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -180,14 +227,14 @@ class _JanelinhaState extends State<Janelinha> {
                             Radius.circular(20),
                           ),
                           borderSide: BorderSide(
-                            color: Colors.greenAccent[400],
+                            color: Colors.grey,
                           ),
                         ),
                         labelText: 'Descrição do Evento',
                         labelStyle:
-                            TextStyle(color: Colors.green[700], fontSize: 12),
+                            TextStyle(color: Colors.white, fontSize: 12),
                         filled: true,
-                        fillColor: Colors.green[50],
+                        fillColor: Colors.grey[800].withOpacity(.8),
                       ),
                       validator: (String value) {
                         if (value.isEmpty) {
