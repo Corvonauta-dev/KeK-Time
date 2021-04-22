@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1000483874520",
+    "project_id": "kek-time",
+    "storage_bucket": "kek-time.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000483874520:android:02b559566a32085b7919ad",
+        "android_client_info": {
+          "package_name": "com.corvonauta_dev.kektime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1000483874520-uv9mkqddhsp79fiugheu344uuie89ot4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApFTCdCqDTgWmZV4NUO5y0adxM4A40kQQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1000483874520-uv9mkqddhsp79fiugheu344uuie89ot4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
