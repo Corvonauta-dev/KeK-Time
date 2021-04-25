@@ -1,11 +1,9 @@
 import 'package:agenda/models/horario.dart';
 import 'package:agenda/pages/Horarios/+h/buildListTile.dart';
-import 'package:agenda/repositories/eventsRepositorie.dart';
-import 'package:day_night_time_picker/lib/constants.dart';
-import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
+import 'package:agenda/pages/Horarios/+h/pgaddHorario.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class Janelona extends StatefulWidget {
   @override
@@ -19,26 +17,22 @@ class _JanelonaState extends State<Janelona> {
 
   List<Horario> _horarios = [];
 
-  TimeOfDay _timeInicio = TimeOfDay.now().replacing(minute: 30);
-
-  void onTimeChangedInicio(TimeOfDay newTime) {
-    setState(() {
-      _timeInicio = newTime;
-    });
-  }
-
-  TimeOfDay _timeFim = TimeOfDay.now().replacing(minute: 30);
-
-  void onTimeChangedFim(TimeOfDay newTime) {
-    setState(() {
-      _timeFim = newTime;
-    });
-  }
-
   save() {
-    Provider.of<EventsRepositorie>(context, listen: false)
-        .addMateria(nome: _nomeEventoController.text, horarios: _horarios);
-
+    var _db = FirebaseFirestore.instance;
+    String userID = '84nMqy2PvegP57q1kqbB';
+    List<Map<String, String>> _horariosDb = [];
+    _horarios.forEach((horario) {
+      _horariosDb.add({
+        'diaSemana': horario.diaSemana,
+        'horarioFim': horario.horarioFim,
+        'horarioInicio': horario.horarioInicio
+      });
+    });
+    var _ref = _db
+        .collection('Usuarios')
+        .doc(userID)
+        .collection('Materias')
+        .add({'nome': _nomeEventoController.text, 'horarios': _horariosDb});
     Get.back();
     Get.snackbar(
       'Sucesso!',
@@ -49,49 +43,15 @@ class _JanelonaState extends State<Janelona> {
     );
   }
 
-  List<DropdownMenuItem<String>> _dropDownMenuItens;
-  String _status;
-
-  List<DropdownMenuItem<String>> _getDropDownMenuItems() {
-    List<DropdownMenuItem<String>> itens = [];
-    itens.add(DropdownMenuItem(
-      value: 'SEG',
-      child: Text('SEG'),
-    ));
-    itens.add(DropdownMenuItem(
-      value: 'TER',
-      child: Text('TER'),
-    ));
-    itens.add(DropdownMenuItem(
-      value: 'QUA',
-      child: Text('QUA'),
-    ));
-    itens.add(DropdownMenuItem(
-      value: 'QUI',
-      child: Text('QUI'),
-    ));
-    itens.add(DropdownMenuItem(
-      value: 'SEX',
-      child: Text('SEX'),
-    ));
-    itens.add(DropdownMenuItem(
-      value: 'SAB',
-      child: Text('SAB'),
-    ));
-
-    return itens;
-  }
-
-  @override
-  void initState() {
-    _dropDownMenuItens = _getDropDownMenuItems();
-    _status = _dropDownMenuItens[0].value;
-    super.initState();
-  }
-
-  void changedDropDownItens(String selectedItem) {
+  addHorario(Horario horario) {
     setState(() {
-      _status = selectedItem;
+      _horarios.add(horario);
+    });
+  }
+
+  delHorario(Horario horario) {
+    setState(() {
+      _horarios.remove(horario);
     });
   }
 
@@ -132,39 +92,6 @@ class _JanelonaState extends State<Janelona> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
           ),
-          // Padding(
-          //   padding: const EdgeInsets.only(top: 120.0),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       InkWell(
-          //         onTap: () {
-          //           Navigator.of(context).push(
-          //             showPicker(
-          //               context: context,
-          //               value: _time,
-          //               onChange: onTimeChanged,
-          //               minuteInterval: MinuteInterval.FIVE,
-          //               disableHour: false,
-          //               disableMinute: false,
-          //               minMinute: 7,
-          //               maxMinute: 56,
-          //               // Optional onChange to receive value as DateTime
-          //               onChangeDateTime: (DateTime dateTime) {
-          //                 print(dateTime);
-          //               },
-          //             ),
-          //           );
-          //         },
-          //         child: Text(
-          //           _time.format(context),
-          //           textAlign: TextAlign.center,
-          //           style: TextStyle(color: Colors.white, fontSize: 52),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           SingleChildScrollView(
             child: Column(
               children: [
@@ -211,7 +138,7 @@ class _JanelonaState extends State<Janelona> {
                             ),
                             validator: (String value) {
                               if (value.isEmpty) {
-                                return "Por Favor Digite o Nome do Evento";
+                                return "Por Favor Digite o Nome da Materia";
                               }
                               return null;
                             },
@@ -220,7 +147,7 @@ class _JanelonaState extends State<Janelona> {
                         Container(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height * .7,
-                          color: Colors.red,
+                          color: Colors.transparent,
                           child: ListView.builder(
                               itemCount: _horarios.length,
                               itemBuilder: (context, index) {
@@ -230,6 +157,7 @@ class _JanelonaState extends State<Janelona> {
                                       padding:
                                           const EdgeInsets.only(bottom: 20),
                                       child: BuildListTile(
+                                        delHorario: this.delHorario,
                                         horario: _horarios[index],
                                       ),
                                     ),
@@ -248,7 +176,13 @@ class _JanelonaState extends State<Janelona> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          createAlertDialog();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  AddHorario(onSave: this.addHorario),
+            ),
+          );
         },
         child: Icon(
           Icons.alarm_add,
@@ -257,118 +191,5 @@ class _JanelonaState extends State<Janelona> {
         backgroundColor: Colors.white30,
       ),
     );
-  }
-
-  createAlertDialog() {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Add Horario'),
-            content: Column(
-              children: [
-                SingleChildScrollView(
-                  child: DropdownButton(
-                    value: _status,
-                    items: _dropDownMenuItens,
-                    onChanged: (String value) {
-                      setState(() {
-                        _status = value;
-                      });
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            showPicker(
-                              context: context,
-                              value: _timeInicio,
-                              onChange: onTimeChangedInicio,
-                              minuteInterval: MinuteInterval.FIVE,
-                              disableHour: false,
-                              disableMinute: false,
-                              minMinute: 7,
-                              maxMinute: 56,
-                              // Optional onChange to receive value as DateTime
-                              onChangeDateTime: (DateTime dateTime) {
-                                print(dateTime);
-                              },
-                            ),
-                          );
-                        },
-                        child: Text(
-                          _timeInicio.format(context),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.black, fontSize: 52),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Text(
-                  'Horario Inicio',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black, fontSize: 15),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            showPicker(
-                              context: context,
-                              value: _timeFim,
-                              onChange: onTimeChangedFim,
-                              minuteInterval: MinuteInterval.FIVE,
-                              disableHour: false,
-                              disableMinute: false,
-                              minMinute: 7,
-                              maxMinute: 56,
-                              // Optional onChange to receive value as DateTime
-                              onChangeDateTime: (DateTime dateTime) {
-                                print(dateTime);
-                              },
-                            ),
-                          );
-                        },
-                        child: Text(
-                          _timeFim.format(context),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.black, fontSize: 52),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Text(
-                  'Horario Fim',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black, fontSize: 15),
-                )
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('Add'),
-                onPressed: () {
-                  setState(() {
-                    _horarios.add(Horario(_timeInicio.format(context),
-                        _timeFim.format(context), _status));
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
   }
 }

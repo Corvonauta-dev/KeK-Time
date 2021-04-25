@@ -3,5 +3,5 @@ class Horario {
   String horarioFim;
   String diaSemana;
 
-  Horario(this.horarioInicio, this.horarioFim, this.diaSemana);
+  Horario({this.horarioInicio, this.horarioFim, this.diaSemana});
 }

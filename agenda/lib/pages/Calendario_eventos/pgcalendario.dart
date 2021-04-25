@@ -1,6 +1,7 @@
 import 'package:agenda/models/evento.dart';
 import 'package:agenda/pages/Calendario_eventos/+c/janelinha.dart';
 import 'package:agenda/repositories/eventsRepositorie.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +26,9 @@ class _Calendario extends State<Calendario> {
   TextEditingController _nomeEventoController;
   TextEditingController _horarioEventoController;
   TextEditingController _descriptionEventoController;
+
+  var _db = FirebaseFirestore.instance;
+  String userID = '84nMqy2PvegP57q1kqbB';
 
   @override
   void initState() {
@@ -138,35 +142,69 @@ class _Calendario extends State<Calendario> {
                             bottomRight: const Radius.circular(20),
                           ),
                         ),
-                        child: Consumer<EventsRepositorie>(
-                          builder: (context, repositorie, child) {
-                            return ListView.builder(
-                              itemCount: repositorie.evento.length,
-                              itemBuilder: (context, index) {
-                                final List<Evento> tabela = repositorie.evento;
-                                return Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    ListTile(
-                                      leading: Text(
-                                        tabela[index].horario,
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      title: Text(
-                                        tabela[index].titulo,
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      subtitle: Text(
-                                        tabela[index].description,
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
+                        child: StreamBuilder(
+                            stream: _db
+                                .collection('Usuarios')
+                                .doc(userID)
+                                .collection('Eventos')
+                                .orderBy('dia')
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                final List<DocumentSnapshot> eventos =
+                                    snapshot.data.docs;
+
+                                return ListView.builder(
+                                  itemCount: eventos.length,
+                                  itemBuilder: (context, evento) {
+                                    String data =
+                                        eventos[evento].data()['dia'] +
+                                            '/' +
+                                            eventos[evento].data()['mes'];
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        ListTile(
+                                          leading: Column(
+                                            children: [
+                                              Text(
+                                                data,
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              Text(
+                                                eventos[evento]
+                                                    .data()['horario'],
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                          title: Text(
+                                            eventos[evento].data()['titulo'],
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          subtitle: Text(
+                                            eventos[evento]
+                                                .data()['description'],
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          },
-                        ),
+                              } else if (snapshot.hasError) {
+                                return Text('It s Error!');
+                              } else {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                            }),
                       ),
                     )
                   ],

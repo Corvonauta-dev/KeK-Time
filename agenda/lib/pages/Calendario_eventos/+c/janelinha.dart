@@ -1,5 +1,5 @@
-import 'package:agenda/models/evento.dart';
 import 'package:agenda/repositories/eventsRepositorie.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:day_night_time_picker/lib/constants.dart';
 import 'package:flutter/material.dart';
@@ -37,12 +37,23 @@ class _JanelinhaState extends State<Janelinha> {
   }
 
   save() {
-    Provider.of<EventsRepositorie>(context, listen: false).addEvento(
-        titulo: _nomeEventoController.text,
-        horario: _time.format(context),
-        description: _descriptionEventoController.text,
-        dia: widget.dia,
-        mes: widget.mes);
+    // Provider.of<EventsRepositorie>(context, listen: false).addEvento(
+    //     titulo: _nomeEventoController.text,
+    //     horario: _time.format(context),
+    //     description: _descriptionEventoController.text,
+    //     dia: widget.dia,
+    //     mes: widget.mes);
+    var _db = FirebaseFirestore.instance;
+    String userID = '84nMqy2PvegP57q1kqbB';
+
+    var _ref =
+        _db.collection('Usuarios').doc(userID).collection('Eventos').add({
+      'titulo': _nomeEventoController.text,
+      'horario': _time.format(context),
+      'description': _descriptionEventoController.text,
+      'dia': widget.dia,
+      'mes': widget.mes
+    });
     Get.back();
     Get.snackbar(
       'Sucesso!',
@@ -157,49 +168,6 @@ class _JanelinhaState extends State<Janelinha> {
                       },
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 8.0),
-                  //   child: TextFormField(
-                  //     controller: _horarioEventoController,
-                  //     style: TextStyle(color: Colors.white),
-                  //     keyboardType: TextInputType.name,
-                  //     textCapitalization: TextCapitalization.words,
-                  //     decoration: InputDecoration(
-                  //       prefixIcon: Icon(
-                  //         Icons.person,
-                  //         color: Colors.white,
-                  //       ),
-                  //       enabledBorder: OutlineInputBorder(
-                  //         borderRadius: BorderRadius.all(
-                  //           Radius.circular(20),
-                  //         ),
-                  //         borderSide: BorderSide(
-                  //           color: Colors.transparent,
-                  //         ),
-                  //       ),
-                  //       focusedBorder: OutlineInputBorder(
-                  //         borderRadius: BorderRadius.all(
-                  //           Radius.circular(20),
-                  //         ),
-                  //         borderSide: BorderSide(
-                  //           color: Colors.grey,
-                  //         ),
-                  //       ),
-                  //       labelText: 'Horario do Evento',
-                  //       labelStyle:
-                  //           TextStyle(color: Colors.white, fontSize: 12),
-                  //       filled: true,
-                  //       fillColor: Colors.grey[800].withOpacity(.8),
-                  //     ),
-                  //     validator: (String value) {
-                  //       if (value.isEmpty) {
-                  //         return "Por Favor Digite o Horario do Evento";
-                  //       }
-                  //       return null;
-                  //     },
-                  //   ),
-                  // ),
-
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: TextFormField(
@@ -256,7 +224,7 @@ class _JanelinhaState extends State<Janelinha> {
           }
         },
         child: Icon(
-          Icons.add,
+          Icons.check,
           color: Colors.black,
         ),
         backgroundColor: Colors.white30,

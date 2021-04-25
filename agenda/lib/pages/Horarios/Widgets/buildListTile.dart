@@ -1,26 +1,24 @@
 import 'package:agenda/models/horario.dart';
-import 'package:agenda/models/materia.dart';
-import 'package:agenda/pages/Horarios/hEdit/pgHorarioEdit.dart';
 import 'package:flutter/material.dart';
 
 class BuildListTile extends StatelessWidget {
-  final Materia materia;
+  final String nome;
   final Horario horario;
 
-  const BuildListTile({Key key, this.materia, this.horario}) : super(key: key);
+  const BuildListTile({Key key, this.horario, this.nome}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => HorarioEdit(
-              materia: materia,
-            ),
-          ),
-        );
-      },
+      // onTap: () {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (BuildContext context) => HorarioEdit(
+      //         materia: materia,
+      //       ),
+      //     ),
+      //   );
+      // },
       leading: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
@@ -58,7 +56,7 @@ class BuildListTile extends StatelessWidget {
             ],
           ),
           children: [
-            TextSpan(text: materia.nome),
+            TextSpan(text: nome),
           ],
         ),
       ),

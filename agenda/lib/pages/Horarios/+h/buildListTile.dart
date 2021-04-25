@@ -1,12 +1,11 @@
 import 'package:agenda/models/horario.dart';
-import 'package:agenda/models/materia.dart';
-import 'package:agenda/pages/Horarios/hEdit/pgHorarioEdit.dart';
 import 'package:flutter/material.dart';
 
 class BuildListTile extends StatelessWidget {
   final Horario horario;
+  ValueChanged<Horario> delHorario;
 
-  const BuildListTile({Key key, this.horario}) : super(key: key);
+  BuildListTile({Key key, this.horario, this.delHorario}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -51,6 +50,15 @@ class BuildListTile extends StatelessWidget {
               TextSpan(text: horario.horarioFim),
             ],
           ),
+        ),
+      ),
+      trailing: IconButton(
+        onPressed: () {
+          delHorario(horario);
+        },
+        icon: Icon(
+          Icons.delete,
+          color: Colors.red,
         ),
       ),
     );

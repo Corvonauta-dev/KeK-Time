@@ -1,16 +1,16 @@
+import 'package:agenda/models/horario.dart';
+import 'package:agenda/models/materia.dart';
 import 'package:agenda/pages/Horarios/+h/pgplush.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'Widgets/materiaHorario.dart';
 
-class Horarios extends StatefulWidget {
-  @override
-  _HorariosState createState() => _HorariosState();
-}
-
-class _HorariosState extends State<Horarios> {
+class Horarios extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var _db = FirebaseFirestore.instance;
+    String userID = '84nMqy2PvegP57q1kqbB';
     return DefaultTabController(
       length: 6,
       child: Scaffold(
@@ -60,28 +60,111 @@ class _HorariosState extends State<Horarios> {
               fit: BoxFit.cover,
               filterQuality: FilterQuality.high,
             ),
-            TabBarView(
-              children: [
-                MateriaHorario(
-                  diaSemana: 'seg',
-                ),
-                MateriaHorario(
-                  diaSemana: 'ter',
-                ),
-                MateriaHorario(
-                  diaSemana: 'qua',
-                ),
-                MateriaHorario(
-                  diaSemana: 'qui',
-                ),
-                MateriaHorario(
-                  diaSemana: 'sex',
-                ),
-                MateriaHorario(
-                  diaSemana: 'sab',
-                ),
-              ],
-            ),
+            StreamBuilder(
+                stream: _db
+                    .collection('Usuarios')
+                    .doc(userID)
+                    .collection('Materias')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final List<DocumentSnapshot> materias = snapshot.data.docs;
+                    final List<Materia> seg = [];
+                    final List<Materia> ter = [];
+                    final List<Materia> qua = [];
+                    final List<Materia> qui = [];
+                    final List<Materia> sex = [];
+                    final List<Materia> sab = [];
+                    materias.forEach((materia) {
+                      materia.data()['horarios'].forEach((horario) {
+                        switch (horario['diaSemana']) {
+                          case 'seg':
+                            seg.add(Materia(
+                                nome: materia.data()['nome'],
+                                horarios: Horario(
+                                    diaSemana: horario['diaSemana'],
+                                    horarioInicio: horario['horarioInicio'],
+                                    horarioFim: horario['horarioInicio'])));
+                            break;
+                          case 'ter':
+                            ter.add(Materia(
+                                nome: materia.data()['nome'],
+                                horarios: Horario(
+                                    diaSemana: horario['diaSemana'],
+                                    horarioInicio: horario['horarioInicio'],
+                                    horarioFim: horario['horarioInicio'])));
+                            break;
+                          case 'qua':
+                            qua.add(Materia(
+                                nome: materia.data()['nome'],
+                                horarios: Horario(
+                                    diaSemana: horario['diaSemana'],
+                                    horarioInicio: horario['horarioInicio'],
+                                    horarioFim: horario['horarioInicio'])));
+                            break;
+                          case 'qui':
+                            qui.add(Materia(
+                                nome: materia.data()['nome'],
+                                horarios: Horario(
+                                    diaSemana: horario['diaSemana'],
+                                    horarioInicio: horario['horarioInicio'],
+                                    horarioFim: horario['horarioInicio'])));
+                            break;
+                          case 'sex':
+                            sex.add(Materia(
+                                nome: materia.data()['nome'],
+                                horarios: Horario(
+                                    diaSemana: horario['diaSemana'],
+                                    horarioInicio: horario['horarioInicio'],
+                                    horarioFim: horario['horarioInicio'])));
+                            break;
+                          case 'sab':
+                            sab.add(Materia(
+                                nome: materia.data()['nome'],
+                                horarios: Horario(
+                                    diaSemana: horario['diaSemana'],
+                                    horarioInicio: horario['horarioInicio'],
+                                    horarioFim: horario['horarioInicio'])));
+                            break;
+                        }
+                      });
+                    });
+                    return TabBarView(
+                      children: [
+                        MateriaHorario(
+                          materias: seg,
+                          diaSemana: 'seg',
+                        ),
+                        MateriaHorario(
+                          materias: ter,
+                          diaSemana: 'ter',
+                        ),
+                        MateriaHorario(
+                          materias: qua,
+                          diaSemana: 'qua',
+                        ),
+                        MateriaHorario(
+                          materias: qui,
+                          diaSemana: 'qui',
+                        ),
+                        MateriaHorario(
+                          materias: sex,
+                          diaSemana: 'sex',
+                        ),
+                        MateriaHorario(
+                          materias: sab,
+                          diaSemana: 'sab',
+                        ),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('It s Error!');
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
           ],
         ),
         floatingActionButton: FloatingActionButton(

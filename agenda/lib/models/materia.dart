@@ -1,8 +1,9 @@
 import 'horario.dart';
 
 class Materia {
+  String id;
   String nome;
-  List<Horario> horarios;
+  Horario horarios;
 
-  Materia(this.nome, this.horarios);
+  Materia({this.id, this.nome, this.horarios});
 }
