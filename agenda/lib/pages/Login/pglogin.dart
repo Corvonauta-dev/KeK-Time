@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:agenda/pages/Cadastro/pgcadastro.dart';
 import 'package:agenda/pages/Tela_inicial/pgtelaini.dart';
 import 'package:flutter/material.dart';

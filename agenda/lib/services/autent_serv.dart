@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AutentServ extends GetxController {
@@ -28,7 +27,8 @@ class AutentServ extends GetxController {
     return retorno;
   }
 
-  criarUsuario(/*String nome, */ String email,
+  criarUsuario(
+      /*String nome, */ String email,
       /* String usuario, */ String senha) async {
     try {
       await _autent.createUserWithEmailAndPassword(

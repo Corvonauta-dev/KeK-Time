@@ -1,12 +1,11 @@
-import 'package:agenda/models/evento.dart';
 import 'package:agenda/pages/Calendario_eventos/+c/janelinha.dart';
-import 'package:agenda/repositories/eventsRepositorie.dart';
+
 import 'package:agenda/services/autent_serv.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 
 class Calendario extends StatefulWidget {
