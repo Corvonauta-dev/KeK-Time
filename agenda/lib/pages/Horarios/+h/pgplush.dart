@@ -1,6 +1,7 @@
 import 'package:agenda/models/horario.dart';
 import 'package:agenda/pages/Horarios/+h/buildListTile.dart';
 import 'package:agenda/pages/Horarios/+h/pgaddHorario.dart';
+import 'package:agenda/services/autent_serv.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class _JanelonaState extends State<Janelona> {
 
   save() {
     var _db = FirebaseFirestore.instance;
-    String userID = '84nMqy2PvegP57q1kqbB';
+    String userID = AutentServ.to.user.uid;
     List<Map<String, String>> _horariosDb = [];
     _horarios.forEach((horario) {
       _horariosDb.add({

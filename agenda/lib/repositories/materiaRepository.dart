@@ -21,7 +21,7 @@
 
 //     var snapshot = await db
 //         .collection("Usuarios")
-//         .doc('84nMqy2PvegP57q1kqbB')
+//         .doc(AutentServ.to.user.uid)
 //         .collection('Materias')
 //         .get();
 

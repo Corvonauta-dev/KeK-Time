@@ -1,6 +1,7 @@
 import 'package:agenda/models/horario.dart';
 import 'package:agenda/models/materia.dart';
 import 'package:agenda/pages/Horarios/+h/pgplush.dart';
+import 'package:agenda/services/autent_serv.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class Horarios extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _db = FirebaseFirestore.instance;
-    String userID = '84nMqy2PvegP57q1kqbB';
+    String userID = AutentServ.to.user.uid;
     return DefaultTabController(
       length: 6,
       child: Scaffold(

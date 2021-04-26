@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:agenda/services/autent_serv.dart';
+import 'dart:io';
 
 class JanelaCadastro extends StatefulWidget {
   const JanelaCadastro({Key key}) : super(key: key);
@@ -14,6 +18,10 @@ int corLogin = Colors.white.value;
 int corSenha = Colors.white.value;
 int corAviso = Colors.transparent.value;
 String txtAviso = "Deu ruim";
+TextEditingController ctrlNome = new TextEditingController();
+TextEditingController ctrlEmail = new TextEditingController();
+TextEditingController ctrlLogin = new TextEditingController();
+TextEditingController ctrlSenha = new TextEditingController();
 
 class _JanelaCadastroState extends State<JanelaCadastro> {
   @override
@@ -24,11 +32,6 @@ class _JanelaCadastroState extends State<JanelaCadastro> {
 
     RegExp expEmail = new RegExp("[a-zA-Z_0-9]+@[a-z]+([\.]{1}[a-z]+)+");
 
-    String funcCadastro(String nome, String email, String login, String senha) {
-      //"MACHINES" - Morpheus, 2199
-      return "Retornar problemas";
-    }
-
     Text txtErro = new Text(txtAviso,
         textScaleFactor: (geralScale * 0.003),
         style: new TextStyle(color: Color(corAviso)));
@@ -37,7 +40,7 @@ class _JanelaCadastroState extends State<JanelaCadastro> {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(RegExp("[a-zA-Z ]+"))
         ],
-        controller: new TextEditingController(),
+        controller: ctrlNome,
         decoration: new InputDecoration(
             labelText: "Nome",
             border: OutlineInputBorder(
@@ -49,7 +52,7 @@ class _JanelaCadastroState extends State<JanelaCadastro> {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.deny(RegExp("[\",/\\\\]"))
         ],
-        controller: new TextEditingController(),
+        controller: ctrlEmail,
         decoration: new InputDecoration(
             labelText: "Email",
             border: OutlineInputBorder(
@@ -61,7 +64,7 @@ class _JanelaCadastroState extends State<JanelaCadastro> {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.deny(RegExp("[\",/\\\\]"))
         ],
-        controller: new TextEditingController(),
+        controller: ctrlLogin,
         decoration: new InputDecoration(
             labelText: "Usuário",
             border: OutlineInputBorder(
@@ -73,7 +76,7 @@ class _JanelaCadastroState extends State<JanelaCadastro> {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.deny(RegExp("[\",/\\\\]"))
         ],
-        controller: new TextEditingController(),
+        controller: ctrlSenha,
         obscureText: true,
         obscuringCharacter: "•",
         decoration: new InputDecoration(
@@ -82,6 +85,31 @@ class _JanelaCadastroState extends State<JanelaCadastro> {
                 borderRadius: BorderRadius.all(Radius.circular(0.0))),
             filled: true,
             fillColor: Color(corSenha)));
+
+    void cadastroDb() {
+      //AutentServ.to.user.uid
+      var _db = FirebaseFirestore.instance;
+      String userID = AutentServ.to.user.uid;
+
+      var _ref = _db
+          .collection('Usuarios')
+          .doc(userID)
+          .set({'nome': ctrlNome.text, 'usuario': ctrlLogin.text});
+    }
+
+    void funcCadastro(
+        String nome, String email, String login, String senha) async {
+      await AutentServ.to.criarUsuario(email, senha);
+      txtAviso = AutentServ.to.pegarRetorno();
+      if (txtAviso == "ok") {
+        txtAviso = "Cadastrado";
+        corAviso = Colors.blue.value;
+        cadastroDb();
+      } else {
+        corAviso = Colors.red.value;
+      }
+      setState(() {});
+    }
 
     TextButton btnCadastrar = new TextButton(
         onPressed: () {
@@ -105,15 +133,11 @@ class _JanelaCadastroState extends State<JanelaCadastro> {
             if (fieldNome.controller.text != "" &&
                 fieldLogin.controller.text != "" &&
                 fieldSenha.controller.text != "") {
-              txtAviso = funcCadastro(
+              funcCadastro(
                   fieldNome.controller.text,
                   fieldEmail.controller.text,
                   fieldLogin.controller.text,
                   fieldSenha.controller.text);
-              if (txtAviso == "")
-                print("Cadastrado");
-              else
-                corAviso = Colors.red.value;
             }
           } else
             corEmail = 0xFFE57373;

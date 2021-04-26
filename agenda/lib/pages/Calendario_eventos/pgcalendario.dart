@@ -1,6 +1,7 @@
 import 'package:agenda/models/evento.dart';
 import 'package:agenda/pages/Calendario_eventos/+c/janelinha.dart';
 import 'package:agenda/repositories/eventsRepositorie.dart';
+import 'package:agenda/services/autent_serv.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _Calendario extends State<Calendario> {
   TextEditingController _descriptionEventoController;
 
   var _db = FirebaseFirestore.instance;
-  String userID = '84nMqy2PvegP57q1kqbB';
+  String userID = AutentServ.to.user.uid;
 
   @override
   void initState() {

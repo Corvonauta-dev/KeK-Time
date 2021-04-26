@@ -1,11 +1,9 @@
-import 'package:agenda/repositories/eventsRepositorie.dart';
+import 'package:agenda/services/autent_serv.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:day_night_time_picker/lib/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:provider/provider.dart';
 
 class Janelinha extends StatefulWidget {
   final String dia;
@@ -44,7 +42,7 @@ class _JanelinhaState extends State<Janelinha> {
     //     dia: widget.dia,
     //     mes: widget.mes);
     var _db = FirebaseFirestore.instance;
-    String userID = '84nMqy2PvegP57q1kqbB';
+    String userID = AutentServ.to.user.uid;
 
     var _ref =
         _db.collection('Usuarios').doc(userID).collection('Eventos').add({

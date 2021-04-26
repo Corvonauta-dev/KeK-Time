@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:agenda/pages/Cadastro/pgcadastro.dart';
 import 'package:agenda/pages/Tela_inicial/pgtelaini.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:agenda/services/autent_serv.dart';
 
 class JanelaLogin extends StatefulWidget {
   const JanelaLogin({Key key}) : super(key: key);
@@ -14,20 +18,25 @@ class JanelaLogin extends StatefulWidget {
 int corLogin = Colors.white.value;
 int corSenha = Colors.white.value;
 int corAviso = Colors.transparent.value;
+TextEditingController ctrlLogin = new TextEditingController();
+TextEditingController ctrlSenha = new TextEditingController();
 
 class _JanelaLoginState extends State<JanelaLogin> {
+  void initFireAutent() async {
+    Get.lazyPut<AutentServ>(() => AutentServ());
+  }
+
   @override
   Widget build(BuildContext context) {
+    initFireAutent();
+
     double totalWidth = MediaQuery.of(context).size.width;
     double totalHeight = MediaQuery.of(context).size.height;
     double geralScale = (totalWidth < totalHeight) ? totalWidth : totalHeight;
 
-    bool funcLogin(String login, String senha) {
-      //"MACHINES" - Morpheus, 2199
-      return true;
-    }
+    RegExp expEmail = new RegExp("[a-zA-Z_0-9]+@[a-z]+([\.]{1}[a-z]+)+");
 
-    Text txtErro = new Text("Login ou senha incorretos",
+    Text txtErro = new Text("Email ou senha incorretos",
         textScaleFactor: (geralScale * 0.003),
         style: new TextStyle(color: Color(corAviso)));
 
@@ -39,9 +48,9 @@ class _JanelaLoginState extends State<JanelaLogin> {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.deny(RegExp("[\",/\\\\]"))
         ],
-        controller: new TextEditingController(),
+        controller: ctrlLogin,
         decoration: new InputDecoration(
-            labelText: "Usuário",
+            labelText: "Email",
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(0.0))),
             filled: true,
@@ -51,7 +60,7 @@ class _JanelaLoginState extends State<JanelaLogin> {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.deny(RegExp("[\",/\\\\]"))
         ],
-        controller: new TextEditingController(),
+        controller: ctrlSenha,
         obscureText: true,
         obscuringCharacter: "•",
         decoration: new InputDecoration(
@@ -61,10 +70,24 @@ class _JanelaLoginState extends State<JanelaLogin> {
             filled: true,
             fillColor: Color(corSenha)));
 
+    void funcLogin(String login, String senha) async {
+      await AutentServ.to.login(login, senha);
+      if (AutentServ.to.pegarRetorno() == "ok")
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => PgTelaIni()));
+      else {
+        corAviso = Colors.red.value;
+        setState(() {});
+      }
+    }
+
     TextButton btnLogin = new TextButton(
         onPressed: () {
           corAviso = Colors.transparent.value;
-          if (fieldLogin.controller.text == "")
+          if (fieldLogin.controller.text == "" ||
+              !(expEmail.hasMatch(fieldLogin.controller.text) &&
+                  (fieldLogin.controller.text ==
+                      expEmail.stringMatch(fieldLogin.controller.text))))
             corLogin = 0xFFE57373;
           else
             corLogin = 0xFFFFFFFF;
@@ -74,12 +97,12 @@ class _JanelaLoginState extends State<JanelaLogin> {
           else
             corSenha = 0xFFFFFFFF;
 
-          if (fieldLogin.controller.text != "" &&
-              fieldSenha.controller.text !=
-                  "") if (funcLogin(
-              fieldLogin.controller.text, fieldSenha.controller.text))
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PgTelaIni()));
+          if (expEmail.hasMatch(fieldLogin.controller.text) &&
+              (fieldLogin.controller.text ==
+                  expEmail.stringMatch(fieldLogin.controller.text)) &&
+              fieldLogin.controller.text != "" &&
+              fieldSenha.controller.text != "")
+            funcLogin(fieldLogin.controller.text, fieldSenha.controller.text);
           else
             corAviso = Colors.red.value;
           setState(() {});
