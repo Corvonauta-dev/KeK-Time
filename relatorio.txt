@@ -1,0 +1,26 @@
+Alunos:
+AS35C:
+Guilherme Takeshi Saeki Abreu
+Lucas Resende Bollini
+CC37X:
+Luiz Guilherme Monteiro Padilha
+
+Bugs:
+⮩ Quadrado/margem superior invisível dentro do sub-bloco(lugar onde exibe eventos) na página do calendario;
+⮩ Texto de eventos descentralizado com o horário;
+⮩ Não exibe horário de fim das matérios, e quando input == NULL, não exibe nada. Banco de dados exibe o seguinte: "beodkc";
+⮩ Mensagens de error não são user friendly.
+
+Funcionalidades Faltantes:
+⮩
+
+Instalação:
+	APK:
+	⮩ Descompactar o arquivo rar e executa-lo em um aparelho nativo Android. Apos execução seguir as orientações de instalação da OS. Abrir o app instalado.
+	GIT:
+	⮩ Executar o seguindo no terminal do flutter, em alguma pasta de sua preferência (não pode ser uma pasta com separações não aceitas pelo VSCode).
+		git clone
+	⮩ realizar os sehuinte comandos no terminal:
+		flutter pub get
+	⮩ compilar o programa com um simulador nativo Android ou em um aparelho nativo Android.
+	
