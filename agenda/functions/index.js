@@ -16,7 +16,7 @@ sgMail.setApiKey(API_KEY);
 exports.novoRegistro = functions.auth.user().onCreate(async user => {
     
 
-    await db.collection('Usuario').doc(user.uid).set({email: user.email});
+    await db.collection('Usuarios').doc(user.uid).set({email: user.email});
 
     // const msg = {
     //     to: user.email,

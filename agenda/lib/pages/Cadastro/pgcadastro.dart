@@ -86,14 +86,25 @@ class _JanelaCadastroState extends State<JanelaCadastro> {
             filled: true,
             fillColor: Color(corSenha)));
 
+    void cadastroDb() {
+      //AutentServ.to.user.uid
+      var _db = FirebaseFirestore.instance;
+      String userID = AutentServ.to.user.uid;
+
+      var _ref = _db
+          .collection('Usuarios')
+          .doc(userID)
+          .update({'nome': ctrlNome.text, 'usuario': ctrlLogin.text});
+    }
+
     void funcCadastro(
         String nome, String email, String login, String senha) async {
       await AutentServ.to.criarUsuario(email, senha);
-      await AutentServ.to.saveName(ctrlNome.text, ctrlLogin.text);
       txtAviso = AutentServ.to.pegarRetorno();
       if (txtAviso == "ok") {
         txtAviso = "Cadastrado";
         corAviso = Colors.blue.value;
+        //cadastroDb();
       } else {
         corAviso = Colors.red.value;
       }
