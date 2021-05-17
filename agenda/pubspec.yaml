@@ -37,6 +37,7 @@ dependencies:
   firebase_core:
   firebase_auth: ^1.0.2
   flutter_launcher_icons: ^0.9.0
+  share: ^2.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -72,6 +73,7 @@ flutter:
     - assets/background-tela-horarios-edit.jpg
     - assets/calendario.jpg
     - assets/telaInicial.gif
+    - assets/entrada.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

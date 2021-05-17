@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:agenda/pages/Cadastro/pgcadastro.dart';
 import 'package:agenda/pages/Tela_inicial/pgtelaini.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +15,19 @@ class JanelaLogin extends StatefulWidget {
   _JanelaLoginState createState() => _JanelaLoginState();
 }
 
+AssetImage bkgImg = new AssetImage("assets/entrada.jpg");
 int corLogin = Colors.white.value;
 int corSenha = Colors.white.value;
 int corAviso = Colors.transparent.value;
 TextEditingController ctrlLogin = new TextEditingController();
 TextEditingController ctrlSenha = new TextEditingController();
 
+
+
 class _JanelaLoginState extends State<JanelaLogin> {
-  void initFireAutent() async {
-    Get.lazyPut<AutentServ>(() => AutentServ());
+
+  void initFireAutent() async{
+	Get.lazyPut<AutentServ>(() => AutentServ());
   }
 
   @override
@@ -39,7 +45,7 @@ class _JanelaLoginState extends State<JanelaLogin> {
         style: new TextStyle(color: Color(corAviso)));
 
     BoxDecoration quadradoCentral = new BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.6),
         border: Border.all(color: Colors.black, style: BorderStyle.solid));
 
     TextField fieldLogin = new TextField(
@@ -68,24 +74,20 @@ class _JanelaLoginState extends State<JanelaLogin> {
             filled: true,
             fillColor: Color(corSenha)));
 
-    void funcLogin(String login, String senha) async {
-      await AutentServ.to.login(login, senha);
-      if (AutentServ.to.pegarRetorno() == "ok")
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => PgTelaIni()));
-      else {
-        corAviso = Colors.red.value;
-        setState(() {});
-      }
+    void funcLogin(String login, String senha) async{
+	await AutentServ.to.login(login,senha);
+	if (AutentServ.to.pegarRetorno() == "ok")
+      		Navigator.push( context, MaterialPageRoute(builder: (context) => PgTelaIni()));
+	else{
+		corAviso = Colors.red.value;
+          	setState(() {});
+	}
     }
 
     TextButton btnLogin = new TextButton(
         onPressed: () {
           corAviso = Colors.transparent.value;
-          if (fieldLogin.controller.text == "" ||
-              !(expEmail.hasMatch(fieldLogin.controller.text) &&
-                  (fieldLogin.controller.text ==
-                      expEmail.stringMatch(fieldLogin.controller.text))))
+          if (fieldLogin.controller.text == "" || !(expEmail.hasMatch(fieldLogin.controller.text) && (fieldLogin.controller.text == expEmail.stringMatch(fieldLogin.controller.text))))
             corLogin = 0xFFE57373;
           else
             corLogin = 0xFFFFFFFF;
@@ -95,14 +97,10 @@ class _JanelaLoginState extends State<JanelaLogin> {
           else
             corSenha = 0xFFFFFFFF;
 
-          if (expEmail.hasMatch(fieldLogin.controller.text) &&
-              (fieldLogin.controller.text ==
-                  expEmail.stringMatch(fieldLogin.controller.text)) &&
-              fieldLogin.controller.text != "" &&
-              fieldSenha.controller.text != "")
-            funcLogin(fieldLogin.controller.text, fieldSenha.controller.text);
+          if (expEmail.hasMatch(fieldLogin.controller.text) && (fieldLogin.controller.text == expEmail.stringMatch(fieldLogin.controller.text)) && fieldLogin.controller.text != "" && fieldSenha.controller.text != "") 
+		funcLogin(fieldLogin.controller.text, fieldSenha.controller.text);
           else
-            corAviso = Colors.red.value;
+            	corAviso = Colors.red.value;
           setState(() {});
         },
         child: Container(
@@ -119,35 +117,40 @@ class _JanelaLoginState extends State<JanelaLogin> {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => JanelaCadastro()));
         },
-        child: Text("Cadastrar", textScaleFactor: (geralScale * 0.003)));
+        child: Text("Cadastrar",style: TextStyle(color: Colors.indigo), textScaleFactor: (geralScale * 0.003)));
 
     return Scaffold(
-        body: Center(
-            child: SingleChildScrollView(
-                child: Wrap(children: <Widget>[
-      Container(
-          width: (geralScale * 0.7),
-          decoration: quadradoCentral,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(height: geralScale * 0.03),
-                Text("Login", textScaleFactor: (geralScale * 0.011)),
-                Container(height: geralScale * 0.05),
-                Container(
-                    height: (geralScale * 0.1),
-                    width: (geralScale * 0.6),
-                    child: fieldLogin),
-                Container(height: geralScale * 0.02),
-                Container(
-                    height: (geralScale * 0.1),
-                    width: (geralScale * 0.6),
-                    child: fieldSenha),
-                Container(height: (geralScale * 0.06), child: txtErro),
-                btnLogin,
-                btnCadastrar,
-                Container(height: geralScale * 0.03)
-              ]))
-    ]))));
+        body: Stack(
+            	children: <Widget>[
+			Image(
+				height: MediaQuery.of(context).size.height,
+            			width: MediaQuery.of(context).size.width,
+				image: bkgImg,
+				fit: BoxFit.fill
+			),
+			 Center(child:
+				SingleChildScrollView(
+                		child: Wrap(children: <Widget>[
+      					Container(
+         					width: (geralScale * 0.7),
+          					decoration: quadradoCentral,
+          					child: Column(
+              						mainAxisAlignment: MainAxisAlignment.center,
+              						children: <Widget>[
+                						Container(height: geralScale * 0.03),
+                						Text("Login", textScaleFactor: (geralScale * 0.011)),
+                						Container(height: geralScale * 0.05),
+                						Container(height: (geralScale * 0.1),width: (geralScale * 0.6),	child: fieldLogin),
+                						Container(height: geralScale * 0.02),
+               	 						Container(height: (geralScale * 0.1),width: (geralScale * 0.6),	child: fieldSenha),
+                						Container(height: (geralScale * 0.06), child: txtErro),
+               							btnLogin,
+                						btnCadastrar,
+                						Container(height: geralScale * 0.03)
+            							]
+						)
+					)
+    				])
+	))]));
   }
 }

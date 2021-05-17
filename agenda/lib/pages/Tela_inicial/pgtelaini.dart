@@ -1,6 +1,7 @@
 import 'package:agenda/pages/Calendario_eventos/pgcalendario.dart';
 import 'package:agenda/pages/Horarios/pghorario.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 import 'Widgets/complexContainer.dart';
 
@@ -101,6 +102,21 @@ class PgTelaIni extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * .81,
+            left: MediaQuery.of(context).size.width * .3,
+            child: Container(
+              height: MediaQuery.of(context).size.height * .11,
+              width: MediaQuery.of(context).size.width * .07,
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  Share.share(
+                      "Venha conhecer e se organizar com o nosso aplicativo KeK Time para sempre estar em dia com a sua programação universitária! \nhttps://drive.google.com/file/d/1LaKYcUbOU4nNXYwomiM_8YC2bFjO2BTa/view?usp=sharing");
+                },
               ),
             ),
           ),

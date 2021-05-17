@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:agenda/services/autent_serv.dart';
+import 'dart:io';
 
 class JanelaCadastro extends StatefulWidget {
   const JanelaCadastro({Key key}) : super(key: key);
@@ -152,44 +154,51 @@ class _JanelaCadastroState extends State<JanelaCadastro> {
                 style: TextStyle(color: Colors.white))));
 
     return Scaffold(
-        body: Center(
-            child: SingleChildScrollView(
-                child: Wrap(children: <Widget>[
-      Container(
-          width: (geralScale * 0.7),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border:
-                  Border.all(color: Colors.black, style: BorderStyle.solid)),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(height: geralScale * 0.05),
-                Text("Cadastro", textScaleFactor: (geralScale * 0.01)),
-                Container(height: geralScale * 0.04),
-                Container(
-                    height: (geralScale * 0.09),
-                    width: (geralScale * 0.6),
-                    child: fieldNome),
-                Container(height: geralScale * 0.02),
-                Container(
-                    height: (geralScale * 0.09),
-                    width: (geralScale * 0.6),
-                    child: fieldEmail),
-                Container(height: geralScale * 0.02),
-                Container(
-                    height: (geralScale * 0.09),
-                    width: (geralScale * 0.6),
-                    child: fieldLogin),
-                Container(height: geralScale * 0.02),
-                Container(
-                    height: (geralScale * 0.09),
-                    width: (geralScale * 0.6),
-                    child: fieldSenha),
-                Container(height: (geralScale * 0.05), child: txtErro),
-                btnCadastrar,
-                Container(height: geralScale * 0.035)
-              ]))
-    ]))));
+        body: Stack(children: <Widget>[
+      Image(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          image: AssetImage("assets/entrada.jpg"),
+          fit: BoxFit.fill),
+      Center(
+          child: SingleChildScrollView(
+              child: Wrap(children: <Widget>[
+        Container(
+            width: (geralScale * 0.7),
+            decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.6),
+                border:
+                    Border.all(color: Colors.black, style: BorderStyle.solid)),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(height: geralScale * 0.05),
+                  Text("Cadastro", textScaleFactor: (geralScale * 0.01)),
+                  Container(height: geralScale * 0.04),
+                  Container(
+                      height: (geralScale * 0.09),
+                      width: (geralScale * 0.6),
+                      child: fieldNome),
+                  Container(height: geralScale * 0.02),
+                  Container(
+                      height: (geralScale * 0.09),
+                      width: (geralScale * 0.6),
+                      child: fieldEmail),
+                  Container(height: geralScale * 0.02),
+                  Container(
+                      height: (geralScale * 0.09),
+                      width: (geralScale * 0.6),
+                      child: fieldLogin),
+                  Container(height: geralScale * 0.02),
+                  Container(
+                      height: (geralScale * 0.09),
+                      width: (geralScale * 0.6),
+                      child: fieldSenha),
+                  Container(height: (geralScale * 0.05), child: txtErro),
+                  btnCadastrar,
+                  Container(height: geralScale * 0.035)
+                ]))
+      ])))
+    ]));
   }
 }
