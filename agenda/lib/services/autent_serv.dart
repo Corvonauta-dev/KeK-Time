@@ -6,6 +6,8 @@ class AutentServ extends GetxController {
   Rx<User> _firebaseUser = Rx<User>();
   var userIsAuthenticated = false.obs;
   String retorno = "";
+  String nome;
+  String usuario;
 
   @override
   void onInit() {
@@ -28,8 +30,9 @@ class AutentServ extends GetxController {
   }
 
   criarUsuario(
-      /*String nome, */ String email,
-      /* String usuario, */ String senha) async {
+    /*String nome, */ String email,
+    /* String usuario, */ String senha,
+  ) async {
     try {
       await _autent.createUserWithEmailAndPassword(
           email: email, password: senha);
@@ -55,5 +58,18 @@ class AutentServ extends GetxController {
     } catch (e) {
       retorno = e.toString();
     }
+  }
+
+  saveName(String name, String user) {
+    nome = name;
+    usuario = user;
+  }
+
+  retornaNome() {
+    return nome;
+  }
+
+  retornaUsuario() {
+    return usuario;
   }
 }
